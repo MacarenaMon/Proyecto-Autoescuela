@@ -1,0 +1,43 @@
+/*Comienzo de HTML UNIDADES*/
+.unidades-1 { margin-top: 100px;
+padding: 50px;
+box-sizing: border-box;}
+
+.sub-h1 { 
+color: deeppink;
+font-size: 50px;
+margin-top: 100px;
+margin-bottom: 100px;
+font-family: cursive;
+text-decoration:underline;
+padding-left: 20px;
+}
+
+.caracteristicas1 { margin-top: 30px;
+    h3 { text-decoration: underline;
+    color: rgb(1, 75, 172);
+    display: inline-block;
+        &:hover{ background-color: rgba(255, 255, 0, 0.342);}
+    }
+    ul { margin-top: 30px;}
+    li { font-size: 22px;
+        &:hover { transform: translateX(150px);
+                    transition: 4s;}}
+    @media (max-width: 480px) {
+                li:hover { transform: translateX(88px);}
+    }
+}
+
+.animate__jello:hover {
+    display: inline-block;
+    animation: jello;
+    animation-duration: 10s;}
+
+@media (max-width: 480px) { 
+    .sub-h1 { font-size: 30px;}
+}
+
+.autitos, .autitos1 { background-color: black;
+display: inline-block;
+color: white;}
+

@@ -1,0 +1,40 @@
+
+.header-container { 
+    display: flex;
+    align-items: center;
+    } 
+    
+header { 
+
+    img { width: 50%;}
+    nav{ background-color: rgb(99, 153, 235);
+        width: 100%;
+        ul{list-style: none;
+            // overflow: hidden;
+            li{ 
+                color: rgb(255, 145, 0);
+                font-size: 20px;
+                text-decoration: none;
+                padding: 12px;
+            
+            }
+        }
+   } 
+}
+
+.nav-link { 
+    font-family: Georgia;
+    color: rgb(1, 75, 172) ;
+    &:hover { 
+        color: deeppink;
+        background-color: rgba(255, 255, 0, 0.342) ;}
+}
+
+.container-fluid { display: flex;
+}
+.navbar { display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: nowrap;
+}
+
