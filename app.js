@@ -6,10 +6,17 @@ const precioTotal = document.querySelector('#precioTotal')
 
 const btnVaciar = document.getElementById('vaciarCarrito')
 
+let carrito
+const carritoEnLS = JSON.parse( localStorage.getItem('carrito') )
 
-const carrito = JSON.parse(localStorage.getItem('carrito')) || []
+let stock = []
 
-stockProductos.forEach((producto) => {
+fetch('./stock.json')
+    .then((resp) => resp.json())
+    .then((data) => {
+        stock = data
+
+stock.forEach((producto) => {
     const div = document.createElement('div')
     div.classList.add('producto')
 
@@ -18,33 +25,28 @@ stockProductos.forEach((producto) => {
                     <h3>${producto.nombre}</h3>
                     <p>${producto.desc}</p>
                     <p>Tipo: ${producto.tipo}</p>
-                    ${producto.freeshipping === true ? '<p><strong>Envío gratis</strong></p>' : ''}
                     <p class="precioProducto">Precio: $${producto.precio}</p>
                     <button onclick="agregarAlCarrito(${producto.id})" class="boton-agregar">Agregar <i class="fas fa-shopping-cart"></i></button>
                 `
 
     productosContainer.append(div)
 })
+})
 
 
 const agregarAlCarrito = (productId) => {
-    const itemInCart = carrito.find((producto) => producto.id === productId)
+    const item = stock.find((producto) => producto.id === productId)
+    carrito.push(item)
 
-    if (itemInCart) {
-        itemInCart.cantidad += 1
-        showMensaje(itemInCart.nombre)
-    } else {
-        const {id, nombre, precio} = stockProductos.find( (producto) => producto.id === productId)
-    
-        const itemToCart = {
-            id, 
-            nombre, 
-            precio, 
-            cantidad: 1
+    Toastify({
+        text: `Se agregó 1 curso de ${item.nombre}`,
+        position: 'right',
+        gravity: 'bottom',
+        duration: 5000,
+        style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
         }
-        carrito.push(itemToCart)
-        showMensaje(nombre)
-    }
+    }).showToast()
 
     localStorage.setItem('carrito', JSON.stringify(carrito))
 
@@ -55,16 +57,13 @@ const agregarAlCarrito = (productId) => {
 }
 
 const removerDelCarrito = (id) => {
+    
     const item = carrito.find((producto) => producto.id === id)
-
-    item.cantidad -= 1
-    if (item.cantidad === 0) {
-        const indice = carrito.indexOf(item)
-        carrito.splice(indice, 1)
-    }
+    const indice = carrito.indexOf(item)
+    carrito.splice(indice, 1)
 
     Toastify({
-        text: `Se eliminó 1 unidad de ${item.nombre}`,
+        text: `Se eliminó 1 curso de ${item.nombre}`,
         position: 'left',
         gravity: 'bottom',
         duration: 5000,
@@ -126,7 +125,6 @@ const renderCarrito = () => {
 
         div.innerHTML = `
                     <p>${item.nombre}</p>
-                    <p>Cantidad: ${item.cantidad}</p>
                     <p>Precio unitario: $${item.precio}</p>
                     <button onclick="removerDelCarrito(${item.id})" class="boton-eliminar"><i class="fas fa-trash-alt"></i></button>
                     `
@@ -136,33 +134,24 @@ const renderCarrito = () => {
 }
 
 const renderCantidad = () => {
-    contadorCarrito.innerText = carrito.reduce((acc, prod) => acc + prod.cantidad, 0)
+    contadorCarrito.innerText = carrito.length
 }
 
 const renderTotal = () => {
     let total = 0
     carrito.forEach((producto) => {
-        total += producto.precio * producto.cantidad
+        total += producto.precio
     })
 
     precioTotal.innerText = total
 }
 
-const showMensaje = (nombre) => {
-    Toastify({
-        text: `Se agregó 1 unidad de ${nombre} al carrito!`,
-        duration: 3000,
-        gravity: 'bottom',
-        position: 'left',
-        onClick: () => {
-            botonAbrir.click()
-        },
-        style: {
-            background: "linear-gradient(to right, #00b09b, #96c93d)",
-        }
-    }).showToast()
-}
+if (carritoEnLS) {
+    carrito = carritoEnLS
 
-renderCarrito()
-renderCantidad()
-renderTotal()
+    renderCarrito()
+    renderCantidad()
+    renderTotal()
+} else {
+    carrito = []
+}
